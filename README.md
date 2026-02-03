@@ -403,18 +403,9 @@ Agent dapat membatasi akses tool berdasarkan role.
 
 MIT License - lihat [LICENSE](LICENSE) file.
 
-## 📞 Support
-
-- **Issues**: https://github.com/dimasananda0501/multi-agent-system/issues
-- **Discussions**: https://github.com/dimasananda0501/multi-agent-system/discussions
-- **Email**: support@xyz-nexus.ai
 
 ## 🙏 Acknowledgments
 
 - Penelitian ini mengikuti best practices dari paper **"Arsitektur dan Implementasi Sistem Multi-Agent AI"**
 - Framework: LangChain, LangGraph, FastAPI
 - Inspired by production multi-agent systems dari Google DeepMind, Anthropic
-
----
-
-**Built with ❤️ for XYZ Digital Transformation**
