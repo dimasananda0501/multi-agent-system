@@ -1,0 +1,60 @@
+services:
+  # Main API service
+  api:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: xyz-ai-nexus
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-false}
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}
+      - API_PORT=8000
+      - LOG_LEVEL=INFO
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+    volumes:
+      - ../data:/app/data # Persist vector DB data
+    restart: unless-stopped
+    networks:
+      - xyz-network
+
+  # Redis for caching and state management
+  redis:
+    image: redis:7-alpine
+    container_name: xyz-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - xyz-network
+
+  # Optional: Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: xyz-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - xyz-network
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  xyz-network:
+    driver: bridge
